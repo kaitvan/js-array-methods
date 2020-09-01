@@ -112,9 +112,9 @@ const businesses = [
   ];
 
 const printBusinessCards = (arr) => {
-    arr.forEach(business => {
+    arr.forEach(function (business) {
         $('.active-businesses-div').append(`
-            <h2>${business.companyName}</h2>
+            <h3>${business.companyName}</h3>
             <p>${business.addressFullStreet}
             <br>${business.addressCity}, ${business['addressStateCode']} ${business.addressZipCode}</p>
             <hr style="border: 1px solid black;" />
@@ -122,4 +122,26 @@ const printBusinessCards = (arr) => {
     })
 }
 
+const printNYBusinessCards = (arr) => {
+    arr.forEach(function (business) {
+        $('.NY-businesses-div').append(`
+            <h3>${business.companyName}</h3>
+            <p>${business.addressFullStreet}
+            <br>${business.addressCity}, ${business['addressStateCode']} ${business.addressZipCode}</p>
+            <hr style="border: 1px solid black;" />
+        `)
+    })
+}
+
+const newYorkBusinesses = businesses.filter(business => {
+        let inNewYork = false;
+
+        if (business.addressStateCode === 'NY') {
+            inNewYork = true;
+        }
+
+        return inNewYork
+    })
+
 printBusinessCards(businesses);
+printNYBusinessCards(newYorkBusinesses);
