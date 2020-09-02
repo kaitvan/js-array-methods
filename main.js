@@ -111,33 +111,30 @@ const businesses = [
     }
   ];
 
-const printCards = (header, businessesArray) => {
-    const outEl = document.querySelector('#output');
-    outEl.innerHTML = `<h1>${header}</h1>`;
+const outEl = document.querySelector("#output")
+outEl.innerHTML = "<h1>Active Businesses</h1>"
 
-    businessesArray.forEach(business => {
-        outEl.innerHTML += `
-        <h2>${business.companyName}</h2>
-        <section>
-            ${business.addressFullStreet}
-        </section>
-        <section>
-            ${business.addressCity}, ${business['addressStateCode']} ${business.addressZipCode}
-        </section>`;
-
-        outEl.innerHTML += "<hr/>";
-    })
-};
+businesses.forEach(business => {
+  outEl.innerHTML += `
+    <h2>${business.companyName}</h2>
+    <section>
+      ${business.addressFullStreet}
+    </section>
+    <section>
+        ${business.addressCity}, ${business['addressStateCode']} ${business.addressZipCode}
+    </section>`
+  outEl.innerHTML += "<hr/>"
+});
 
 const newYorkBusinesses = businesses.filter(business => {
-    let inNewYork = false;
-
-    if (business.addressStateCode === 'NY') {
-        inNewYork = true;
+    let inNewYork = false
+  
+    if (business.addressStateCode === "NY") {
+        inNewYork = true
     }
-
+  
     return inNewYork
-})
+});
 
 const manufacturingBusinesses = businesses.filter(business => {
     let inManufacturing = false;
@@ -147,45 +144,40 @@ const manufacturingBusinesses = businesses.filter(business => {
     }
 
     return inManufacturing;
-})
+});
 
-// const printAgents = () => {
-//     const outEl = document.querySelector('#output');
-//     outEl.innerHTML += "<h1>Purchasing Agents</h1>";
-    
-//     const agents = businesses.map(business => {
-//         return business.purchasingAgent;
-//     })
+outEl.innerHTML += "<h1>Purchasing Agents</h1>";
 
-//     console.table(agents)
+const agents = businesses.map(business => {
+    let agentObject = new Object();
+    agentObject.fullname = `${business.purchasingAgent.nameFirst} ${business.purchasingAgent.nameLast}`,
+    agentObject.companyName = business.companyName,
+    agentObject.phoneNumber = business.phoneWork 
+    return agentObject;
+});
 
-//     agents.forEach(agent => {
-//         outEl.innerHTML += `<h2>${agent.nameFirst} ${agent.nameLast}</h2>`;
-//         outEl.innerHTML += "<hr/>";
-//     })
-// }
+console.table(agents)
 
-const printAgents = () => {
-    const outEl = document.querySelector('#output');
-    outEl.innerHTML += "<h1>Purchasing Agents</h1>";
-    
-    const agents = businesses.map(business => {
-        let agentObject = new Object();
-        agentObject.fullname = `${business.purchasingAgent.nameFirst} ${business.purchasingAgent.nameLast}`,
-        agentObject.companyName = business.companyName,
-        agentObject.phoneNumber = business.phoneWork 
-        return agentObject;
-    })
+agents.forEach(agent => {
+  outEl.innerHTML += `<h2>${agent.fullname}</h2>
+  <section>${agent.companyName}</section>
+  <section>${agent.phoneNumber}</section>`;
+  outEl.innerHTML += "<hr/>";
+});
 
-    console.table(agents)
+document
+    .querySelector("#agentSearch")
+    .addEventListener("keypress", keyPressEvent => {
+        if (keyPressEvent.charCode === 13) {
+            /* WHEN  USER PRESSES ENTER, FIND MATCHING BUSINESS */
+            const foundName = agents.find(
+                agent =>
+                    agent.fullname.includes(keyPressEvent.target.value)
+            );
 
-    agents.forEach(agent => {
-        outEl.innerHTML += `<h2>${agent.fullname}</h2>
-        <section>${agent.companyName}</section>
-        <section>${agent.phoneNumber}</section>`
-        outEl.innerHTML += "<hr/>";
-    })
-}
-
-printCards('Manufacturing Businesses', manufacturingBusinesses);
-printAgents();
+            outEl.innerHTML = `<h2>${foundName.fullname}</h2>
+            <section>${foundName.companyName}</section>
+            <section>${foundName.phoneNumber}</section>
+            <hr/>`
+        }
+    });
