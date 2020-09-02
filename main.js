@@ -109,14 +109,27 @@ const businesses = [
       addressFullStreet: "7157 Hudson Street Ford",
       addressCity: "Watrous"
     }
-  ];
+];
+
+const monthlyRainfall = [23, 13, 27, 20, 20, 31, 33, 26, 19, 12, 14, 12, 10]
+const totalRainfall = monthlyRainfall.reduce((currentTotal, nextValue) => currentTotal += nextValue, 0)
+console.log(totalRainfall)
+
+const words = ["The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"]
+const sentence = words.reduce((currentSentence, nextWord) => currentSentence += ` ${nextWord}`, '')
+console.log(sentence)
 
 const outEl = document.querySelector("#output")
 outEl.innerHTML = "<h1>Active Businesses</h1>"
 
 businesses.forEach(business => {
+  let totalOrders = business.orders.reduce(
+      (currentTotal, nextValue) => currentTotal += nextValue,
+      0
+  )
+
   outEl.innerHTML += `
-    <h2>${business.companyName}</h2>
+    <h2>${business.companyName} ($${totalOrders})</h2>
     <section>
       ${business.addressFullStreet}
     </section>
@@ -181,3 +194,4 @@ document
             <hr/>`
         }
     });
+
